@@ -72,3 +72,14 @@ def get_song_by_id(id):
     if not song:
         return {"message": "song with id not found"}, 404
     return json_util.dumps(song), 200
+
+@app.post("/song")
+def create_song():
+    data = request.get_json()
+
+    existing_song = db.songs.count_documents({"id": data["id"]})
+    if existing_song > 0:
+        return {"Message": f"song with id {data['id']} already present"}, 302
+
+    db.songs.insert_one(data)
+    return "", 201
