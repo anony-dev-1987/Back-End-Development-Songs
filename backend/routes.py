@@ -56,3 +56,7 @@ def parse_json(data):
 def health():
     return {"status": "OK"}, 200
 
+@app.get("/count")
+def count():
+    count = db.songs.count_documents({})
+    return {"count": count}, 200
