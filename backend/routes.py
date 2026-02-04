@@ -60,3 +60,8 @@ def health():
 def count():
     count = db.songs.count_documents({})
     return {"count": count}, 200
+
+@app.get("/song")
+def songs():
+    songs = list(db.songs.find({}))
+    return json_util.dumps({"songs": songs}), 200
