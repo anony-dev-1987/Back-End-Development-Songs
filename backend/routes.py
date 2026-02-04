@@ -83,3 +83,18 @@ def create_song():
 
     db.songs.insert_one(data)
     return "", 201
+
+@app.put("/song/<int:id>")
+def update_song(id):
+    song = db.songs.find_one({"id": id})
+    if not song:
+        return {"message": "song not found"}, 404
+
+    data = request.get_json()
+
+    result = db.songs.update_one({"id": id}, {"$set": data})
+
+    if result.modified_count == 0:
+        return {"message": "song found, but nothing updated"}, 200
+    else:
+        return parse_json(db.songs.find_one({"id": id})), 201
